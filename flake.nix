@@ -52,6 +52,7 @@
         # Import DAG staging functions
         dagLib = import ./nix/stage_dags.nix { inherit pkgs python; lib = nixpkgs.lib; };
 
+
         # Override Python packages in nixpkgs to redirect PyPI URLs to Artifactory
         nixpkgsArtifactoryOverlay = final: prev:
           let
@@ -179,19 +180,31 @@
 
         pythonEnv = pythonSet.mkVirtualEnv "billing-airflow" workspace.deps.default;
 
-        # Create DAG packages for all regions and environments
-        dagPackages = dagLib.mkAllDagPackages {
-          regionalRepos = [
-            { name = "na"; repo = billing-na-airflow; }
-            { name = "emea"; repo = billing-emea-airflow; }
-            { name = "apac"; repo = billing-apac-airflow; }
-          ];
+        # Create specific DAG packages matching environments.json
+        dagPackages = {
+          # APAC environments
+          approd = dagLib.mkDagPackage { repo = billing-apac-airflow; region = "apac"; environment = "prod"; };
+          apstaging = dagLib.mkDagPackage { repo = billing-apac-airflow; region = "apac"; environment = "stage"; };
+          
+          # NA environments  
+          "dev-billing" = dagLib.mkDagPackage { repo = billing-na-airflow; region = "na"; environment = "dev"; };
+          prod = dagLib.mkDagPackage { repo = billing-na-airflow; region = "na"; environment = "prod"; };
+          nastaging = dagLib.mkDagPackage { repo = billing-na-airflow; region = "na"; environment = "stage"; };
+          
+          # EMEA environments
+          "euprod-alt" = dagLib.mkDagPackage { repo = billing-emea-airflow; region = "emea"; environment = "prod"; };
         };
+
+        # Import Airflow app functions and create apps
+        airflowAppLib = import ./nix/airflow_apps.nix { inherit pkgs python pythonEnv; lib = nixpkgs.lib; inherit dagPackages; };
+        airflowApps = airflowAppLib.mkAllAirflowApps;
       in
       {
         packages = {
           default = pythonEnv;
         } // dagPackages;
+
+        apps = airflowApps;
 
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
@@ -210,7 +223,7 @@
           shellHook = ''
             export REPO_ROOT=$(pwd)
             # run `nix build .#na-prod` to place the na prod dags in $(pwd)/result/dags
-            export AIRFLOW_HOME=$(pwd)/result
+            export AIRFLOW_HOME=$(pwd)/airflow_home
           '';
         };
       });

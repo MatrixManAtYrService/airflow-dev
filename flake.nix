@@ -49,6 +49,9 @@
         # Import Artifactory overlay functions
         artifactoryLib = import ./nix/artifactory.nix { inherit (nixpkgs) lib; };
 
+        # Import DAG staging functions
+        dagLib = import ./nix/stage_dags.nix { inherit pkgs python; lib = nixpkgs.lib; };
+
         # Override Python packages in nixpkgs to redirect PyPI URLs to Artifactory
         nixpkgsArtifactoryOverlay = final: prev:
           let
@@ -175,11 +178,20 @@
         );
 
         pythonEnv = pythonSet.mkVirtualEnv "billing-airflow" workspace.deps.default;
+
+        # Create DAG packages for all regions and environments
+        dagPackages = dagLib.mkAllDagPackages {
+          regionalRepos = [
+            { name = "na"; repo = billing-na-airflow; }
+            { name = "emea"; repo = billing-emea-airflow; }
+            { name = "apac"; repo = billing-apac-airflow; }
+          ];
+        };
       in
       {
         packages = {
           default = pythonEnv;
-        };
+        } // dagPackages;
 
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
@@ -197,7 +209,7 @@
           };
           shellHook = ''
             export REPO_ROOT=$(pwd)
-            # run `nix build .#na` to place the na dags here:
+            # run `nix build .#na-prod` to place the na prod dags in $(pwd)/result/dags
             export AIRFLOW_HOME=$(pwd)/result
           '';
         };

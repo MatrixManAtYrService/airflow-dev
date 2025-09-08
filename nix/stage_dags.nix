@@ -10,8 +10,8 @@ rec {
     buildInputs = [ python pkgs.tree ];
 
     buildPhase = ''
-      # Set up constants for the build
-      PROJECT_NAME=$(basename ${src} | sed 's/^billing-//' | sed 's/-airflow$//')_airflow
+      # Set up constants for the build - derive from region name instead of src path
+      PROJECT_NAME=${region}_airflow
       PACKAGE_VERSION="1.0.0"
       GIT_HASH="nix-build"
       K8S_PROP="${environment}"

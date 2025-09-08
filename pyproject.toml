@@ -1,0 +1,98 @@
+[project]
+name = "billing-airflow"
+description = "Airflow DAGs and tasks for billing operations"
+readme = "README.md"
+authors = [
+    { name = "Matt Rixman", email = "matt.rixman@clover.com" },
+]
+requires-python = ">=3.11"
+dependencies = [
+    "aiohttp==3.10.11",
+    "apache-airflow-providers-pagerduty==3.2.0",
+    "apache-airflow[celery]==2.10.5",
+    "sendgrid==6.10.0",
+]
+version = "0.1.0"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build]
+packages = ["src/clover_billing"]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort (import sorting)
+    "UP",  # pyupgrade
+    "B" ,  # flake8-bugbear
+    "SIM", # flake8-simplify
+    "A",   # flake8-builtins
+    "ANN", # flake8-annotations
+    "C"  , # flake8-comprehensions
+]
+
+fixable = ["ALL"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["clover_billing"]
+force-single-line = false
+combine-as-imports = true
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.1",
+    "pdoc>=14.0.0",
+]
+
+[[tool.uv.index]]
+name = "artifactory"
+url = "https://artifactory.corp.clover.com/artifactory/api/pypi/libs-python/simple"
+explicit = true
+
+[tool.uv.sources]
+iniconfig = { index = "artifactory"}
+
+[tool.pyright]
+include = ["src/clover_billing"]
+
+exclude = [
+    "**/__pycache__",
+    "**/.*",
+    "**/.git",
+    "**/venv",
+    "**/result",
+    "**/target",
+    "**/dist",
+    "**/build",
+]
+typeCheckingMode = "strict"
+reportMissingTypeStubs = "error"
+reportUnknownMemberType = "error"
+reportUnknownArgumentType = "error"
+reportUnknownVariableType = "error"
+reportUnknownParameterType = "error"
+reportMissingParameterType = "error"
+reportMissingReturnType = "error"
+reportUntypedFunctionDecorator = "error"
+reportUntypedClassDecorator = "error"
+reportUntypedBaseClass = "error"
+reportUntypedNamedTuple = "error"
+reportAny = "error"
+
+[tool.pytest.ini_options]
+addopts = "-sv --tb=short"
+testpaths = ["src/tests"]
+pythonpath = ["src"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]

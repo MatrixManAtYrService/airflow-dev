@@ -10,8 +10,13 @@ rec {
     buildInputs = [ python pkgs.tree ];
 
     buildPhase = ''
-      # Set up constants for the build - derive from region name instead of src path
-      PROJECT_NAME=${region}_airflow
+      # Set up constants for the build - map region to correct project name
+      case "${region}" in
+        "na") PROJECT_NAME="billing_na_airflow" ;;
+        "emea") PROJECT_NAME="billing_emea_airflow" ;;
+        "apac") PROJECT_NAME="billing_apac_airflow" ;;
+        *) PROJECT_NAME="${region}_airflow" ;;
+      esac
       PACKAGE_VERSION="1.0.0"
       GIT_HASH="nix-build"
       K8S_PROP="${environment}"

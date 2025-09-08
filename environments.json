@@ -1,0 +1,8 @@
+{
+  "approd": "projects/clover-composer2-approd/locations/asia-south2/environments/composer2-approd-swzdbrs2t0",
+  "apstaging": "projects/clover-composer2-apstaging/locations/asia-south1/environments/composer2-apstaging-xgtkvy8puy",
+  "dev-billing": "projects/clover-composer2-dev-billing/locations/us-west1/environments/composer2-dev-7f5k3j2h1q",
+  "euprod-alt": "projects/clover-composer2-euprod-alt/locations/europe-west1/environments/composer2-euprod-g7k2q1z4m3",
+  "prod": "projects/clover-composer2-prod/locations/us-central1/environments/composer2-naprod-a7b3c9d2e1",
+  "nastaging": "projects/clover-composer2-nastaging/locations/us-central1/environments/composer2-nastaging-2ts9ql1kpb"
+}

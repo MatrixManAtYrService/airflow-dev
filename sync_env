@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# --- Help Function ---
+show_help() {
+cat << EOF
+Usage: ${0##*/} <environment_name>
+Fetch Airflow variables from a specified Google Cloud Composer environment and print them as a JSON object.
+
+    <environment_name>    The short name of the environment (e.g., prod, dev1) as defined in environments.json.
+    -h, --help            Display this help and exit.
+EOF
+}
+
+# --- Argument Parsing ---
+if [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]]; then
+    show_help
+    exit 0
+fi
+
+if [ -z "${1-}" ]; then
+  echo "Error: Missing environment name." >&2
+  show_help
+  exit 1
+fi
+
+ENV_NAME=$1
+
+# --- Prerequisite Check ---
+if ! command -v jq &> /dev/null; then
+    echo "Error: jq is not installed. Please install it to use this script." >&2
+    exit 1
+fi
+
+if [ ! -f "environments.json" ]; then
+    echo "Error: environments.json not found in the current directory." >&2
+    exit 1
+fi
+
+GCLOUD_ENV=$(jq -r --arg ENV_NAME "$ENV_NAME" '.[$ENV_NAME]' environments.json)
+
+if [ -z "$GCLOUD_ENV" ] || [ "$GCLOUD_ENV" == "null" ]; then
+  echo "Error: Environment '$ENV_NAME' not found in environments.json" >&2
+  exit 1
+fi
+
+# export vars
+set -x
+gcloud --quiet composer environments run "$GCLOUD_ENV" variables export -- -

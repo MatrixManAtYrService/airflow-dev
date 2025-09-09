@@ -180,6 +180,36 @@
 
         pythonEnv = pythonSet.mkVirtualEnv "billing-airflow" workspace.deps.default;
 
+        # Create a package for the billing-airflow flake input
+        billing-airflow-pkg = pkgs.python311Packages.buildPythonPackage {
+          pname = "billing-airflow";
+          version = "0.1.0";
+          src = billing-airflow;
+
+          propagatedBuildInputs = with pkgs.python311Packages; [
+            aiohttp
+            sendgrid
+          ];
+        };
+        billing-na-airflow-pkg = pkgs.python311Packages.buildPythonPackage {
+          pname = "billing-na-airflow";
+          version = "0.1.0";
+          src = billing-na-airflow;
+
+          # Add git to the build inputs so the setup_support.py script can run
+          nativeBuildInputs = [ pkgs.git ];
+
+          # Run setup_support.py before the build
+          preBuild = ''
+            python setup_support.py
+          '';
+
+          # Add the dependency on the billing-airflow package we just defined
+          propagatedBuildInputs = [
+            billing-airflow-pkg
+          ];
+        };
+
         # Create specific DAG packages matching environments.json
         dagPackages = {
           # APAC environments
@@ -195,20 +225,23 @@
           "euprod-alt" = dagLib.mkDagPackage { repo = billing-emea-airflow; region = "emea"; environment = "prod"; };
         };
 
-        # Import Airflow app functions and create apps
-        airflowAppLib = import ./nix/airflow_apps.nix { inherit pkgs python pythonEnv; lib = nixpkgs.lib; inherit dagPackages; };
-        airflowApps = airflowAppLib.mkAllAirflowApps;
+        # Import Airflow app
+        airflowApp = import ./nix/airflow_apps.nix { inherit pkgs python pythonEnv; lib = nixpkgs.lib; };
       in
       {
         packages = {
           default = pythonEnv;
         } // dagPackages;
 
-        apps = airflowApps;
+        apps = {
+          airflow = airflowApp.airflow;
+        };
 
         devShells.default = pkgs.mkShell {
           buildInputs = with pkgs; [
             (editablePythonSet.mkVirtualEnv "billing-airflow" workspace.deps.all)
+            billing-airflow-pkg
+            billing-na-airflow-pkg
             uv
             ruff
             python311Packages.python-lsp-ruff

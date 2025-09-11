@@ -46,4 +46,4 @@ fi
 
 # export vars
 set -x
-gcloud --quiet composer environments run "$GCLOUD_ENV" variables export -- -
+gcloud --quiet composer environments run "$GCLOUD_ENV" variables export -- - | jq --arg env "$ENV_NAME" '{ "env": $env, "variables": . }' 

@@ -1,5 +1,6 @@
 {
   "apstaging": "projects/clover-composer2-apstaging/locations/asia-south1/environments/composer2-apstaging-xgtkvy8puy",
   "dev-billing": "projects/clover-composer2-dev-billing/locations/us-west1/environments/composer2-dev-7f5k3j2h1q",
-  "nastaging": "projects/clover-composer2-nastaging/locations/us-central1/environments/composer2-nastaging-2ts9ql1kpb"
+  "nastaging": "projects/clover-composer2-nastaging/locations/us-central1/environments/composer2-nastaging-2ts9ql1kpb",
+  "apstaging": "projects/clover-composer2-apstaging/locations/asia-south1/environments/composer2-apstaging-xgtkvy8puy"
 }

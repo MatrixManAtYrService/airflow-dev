@@ -134,10 +134,10 @@
 
         google-re2-overlay = final: prev: {
           google-re2 = prev.google-re2.overrideAttrs (oldAttrs: {
-            buildInputs = (oldAttrs.buildInputs or []) ++ [
+            buildInputs = (oldAttrs.buildInputs or [ ]) ++ [
               final.setuptools
             ];
-            nativeBuildInputs = (oldAttrs.nativeBuildInputs or []) ++ [
+            nativeBuildInputs = (oldAttrs.nativeBuildInputs or [ ]) ++ [
               pkgs.abseil-cpp
               final.pybind11
               pkgs.re2
@@ -147,7 +147,7 @@
 
         python-nvd3-overlay = final: prev: {
           python-nvd3 = prev.python-nvd3.overrideAttrs (oldAttrs: {
-            buildInputs = (oldAttrs.buildInputs or []) ++ [
+            buildInputs = (oldAttrs.buildInputs or [ ]) ++ [
               final.setuptools
             ];
           });
@@ -155,7 +155,7 @@
 
         starkbank-ecdsa-overlay = final: prev: {
           starkbank-ecdsa = prev.starkbank-ecdsa.overrideAttrs (oldAttrs: {
-            buildInputs = (oldAttrs.buildInputs or []) ++ [
+            buildInputs = (oldAttrs.buildInputs or [ ]) ++ [
               final.setuptools
             ];
           });
@@ -210,23 +210,70 @@
           ];
         };
 
+        billing-emea-airflow-pkg = pkgs.python311Packages.buildPythonPackage {
+          pname = "billing-emea-airflow";
+          version = "0.1.0";
+          src = billing-emea-airflow;
+
+          # Add git to the build inputs so the setup_support.py script can run
+          nativeBuildInputs = [ pkgs.git ];
+
+          # Run setup_support.py before the build
+          preBuild = ''
+            python setup_support.py
+          '';
+
+          # Add the dependency on the billing-airflow package we just defined
+          propagatedBuildInputs = [
+            billing-airflow-pkg
+          ];
+        };
+
+        billing-apac-airflow-pkg = pkgs.python311Packages.buildPythonPackage {
+          pname = "billing-apac-airflow";
+          version = "0.1.0";
+          src = billing-apac-airflow;
+
+          # Add git to the build inputs so the setup_support.py script can run
+          nativeBuildInputs = [ pkgs.git ];
+
+          # Run setup_support.py before the build
+          preBuild = ''
+            python setup_support.py
+          '';
+
+          # Add the dependency on the billing-airflow package we just defined
+          propagatedBuildInputs = [
+            billing-airflow-pkg
+          ];
+        };
+
         # Create specific DAG packages matching environments.json
         dagPackages = {
           # APAC environments
           approd = dagLib.mkDagPackage { repo = billing-apac-airflow; region = "apac"; environment = "prod"; };
           apstaging = dagLib.mkDagPackage { repo = billing-apac-airflow; region = "apac"; environment = "stage"; };
-          
+
           # NA environments  
           "dev-billing" = dagLib.mkDagPackage { repo = billing-na-airflow; region = "na"; environment = "dev"; };
           prod = dagLib.mkDagPackage { repo = billing-na-airflow; region = "na"; environment = "prod"; };
           nastaging = dagLib.mkDagPackage { repo = billing-na-airflow; region = "na"; environment = "stage"; };
-          
+
           # EMEA environments
           "euprod-alt" = dagLib.mkDagPackage { repo = billing-emea-airflow; region = "emea"; environment = "prod"; };
         };
 
         # Import Airflow app
-        airflowApp = import ./nix/airflow_apps.nix { inherit pkgs python pythonEnv; lib = nixpkgs.lib; };
+        airflowApp = import ./nix/airflow_apps.nix {
+          inherit pkgs python pythonEnv;
+          lib = nixpkgs.lib;
+          nix = pkgs.nix;
+          regionalAirflowPkgs = [
+            billing-na-airflow-pkg
+            billing-emea-airflow-pkg
+            billing-apac-airflow-pkg
+          ];
+        };
       in
       {
         packages = {
@@ -234,7 +281,7 @@
         } // dagPackages;
 
         apps = {
-          airflow = airflowApp.airflow;
+          prep-airflow = airflowApp.prep-airflow;
         };
 
         devShells.default = pkgs.mkShell {
@@ -242,6 +289,8 @@
             (editablePythonSet.mkVirtualEnv "billing-airflow" workspace.deps.all)
             billing-airflow-pkg
             billing-na-airflow-pkg
+            billing-emea-airflow-pkg
+            billing-apac-airflow-pkg
             uv
             ruff
             python311Packages.python-lsp-ruff
@@ -254,9 +303,8 @@
             UV_PYTHON_DOWNLOADS = "never";
           };
           shellHook = ''
-            export REPO_ROOT=$(pwd)
-            # run `nix build .#na-prod` to place the na prod dags in $(pwd)/result/dags
-            export AIRFLOW_HOME=$(pwd)/airflow_home
+              export REPO_ROOT=$(pwd)
+              export AIRFLOW_HOME=$(pwd)/airflow_home
           '';
         };
       });

@@ -52,6 +52,11 @@ EOF
       # Copy the entire source package to make it importable
       mkdir -p $out/dags/src
       cp -r src/''${PROJECT_NAME} $out/dags/src/
+
+      # Create a .airflowignore file in the src directory to prevent duplicate DAG loading
+      echo "dev" > $out/dags/src/''${PROJECT_NAME}/.airflowignore
+      echo "prod" >> $out/dags/src/''${PROJECT_NAME}/.airflowignore
+      echo "stage" >> $out/dags/src/''${PROJECT_NAME}/.airflowignore
       
       # Copy the requirements.txt if it exists
       if [ -f requirements.txt ]; then

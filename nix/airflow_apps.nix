@@ -1,24 +1,29 @@
 {
-  pkgs, lib, python, pythonEnv
+  pkgs, lib, python, pythonEnv, nix, regionalAirflowPkgs
 }:
 
 let
   # A single app to set up Airflow from stdin
   setupScript = pkgs.writeShellApplication {
     name = "setup-airflow-from-stdin";
-    runtimeInputs = [ pkgs.jq python pythonEnv ];
+    runtimeInputs = [ pkgs.jq python pythonEnv nix ] ++ regionalAirflowPkgs;
 
     text = ''
       set -euo pipefail
       echo "Setting up Airflow environment from stdin..."
 
-      # Read variables from stdin
-      VARIABLES_JSON=$(cat -)
+      # Read the combined JSON from stdin
+      INPUT_JSON=$(cat -)
 
-      # If stdin was empty, default to empty JSON
-      if [ -z "$VARIABLES_JSON" ]; then
-          VARIABLES_JSON="{}"
+      # If stdin was empty, exit
+      if [ -z "$INPUT_JSON" ]; then
+          echo "Error: Input JSON is empty." >&2
+          exit 1
       fi
+
+      # Extract variables and environment
+      VARIABLES_JSON=$(echo "$INPUT_JSON" | jq '.variables')
+      ENV_NAME=$(echo "$INPUT_JSON" | jq -r '.env')
 
       # Set up airflow home directory
       AIRFLOW_HOME_DIR="$(pwd)/airflow_home"
@@ -41,6 +46,26 @@ let
         echo "--> Setting variable: '$key'"
         airflow variables set "$key" "$value"
       done
+      
+      # Build and stage the dags for the specified environment
+      echo "Building and staging DAGs for environment: $ENV_NAME"
+      nix build ".#$ENV_NAME" --out-link result
+
+      # Manage the dags symlink
+      DagsLinkPath="$AIRFLOW_HOME_DIR/dags"
+      if [ -e "$DagsLinkPath" ]; then
+        if [ -L "$DagsLinkPath" ]; then
+          rm -f "$DagsLinkPath"
+        else
+          echo "Error: $DagsLinkPath is a directory, not a symlink." >&2
+          echo "Please fix this by running:" >&2
+          echo "  sudo rm -rf $DagsLinkPath" >&2
+          echo "Then re-run the prep-airflow command." >&2
+          exit 1
+        fi
+      fi
+      
+      ln -s "$(pwd)/result/dags" "$DagsLinkPath"
 
       echo "✅ Environment setup complete!"
     '';
@@ -48,7 +73,7 @@ let
 in
 {
   # This is now the main app
-  airflow = {
+  prep-airflow = {
     type = "app";
     program = "${setupScript}/bin/setup-airflow-from-stdin";
   };

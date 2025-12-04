@@ -3,66 +3,53 @@
     "billing-airflow": {
       "flake": false,
       "locked": {
-        "lastModified": 1764865610,
-        "narHash": "sha256-0BCzWma/Y7Sx5fXV7zJNoOkazR4XaHTRPm1SFJL063g=",
-        "ref": "main",
-        "rev": "891fff7341a227446925d7f0410583395c11961a",
-        "revCount": 415,
-        "type": "git",
-        "url": "file:///Users/matt.rixman/localgit/billing-airflow"
+        "lastModified": 1764890219,
+        "narHash": "sha256-tpg006UPcLr9+2yhucj+w0IXt+i6KyR6ep9LszbFB4Q=",
+        "path": "/Users/matt.rixman/src/billing-airflow",
+        "type": "path"
       },
       "original": {
-        "ref": "main",
-        "type": "git",
-        "url": "file:///Users/matt.rixman/localgit/billing-airflow"
+        "path": "/Users/matt.rixman/src/billing-airflow",
+        "type": "path"
       }
     },
     "billing-apac-airflow": {
       "flake": false,
       "locked": {
-        "lastModified": 1756372473,
-        "narHash": "sha256-bxKBPKnyig0oEFoCxAOs/+tUqhZAP8gdpK96+jR2gB0=",
-        "ref": "refs/heads/main",
-        "rev": "916a821912368119a28522fe5c359d631879bc1b",
-        "revCount": 178,
-        "type": "git",
-        "url": "file:///Users/matt.rixman/localgit/billing-apac-airflow"
+        "lastModified": 1764804421,
+        "narHash": "sha256-v3uVRDtOqiFh/Ie9NquovQbjmkuVAKXsnHNsxImj1No=",
+        "path": "/Users/matt.rixman/src/billing-apac-airflow",
+        "type": "path"
       },
       "original": {
-        "type": "git",
-        "url": "file:///Users/matt.rixman/localgit/billing-apac-airflow"
+        "path": "/Users/matt.rixman/src/billing-apac-airflow",
+        "type": "path"
       }
     },
     "billing-emea-airflow": {
       "flake": false,
       "locked": {
-        "lastModified": 1757673144,
-        "narHash": "sha256-kBIXyuiDdZYzsCerwc/BbhG+YP3eC4YoZ00B3rOkNiU=",
-        "ref": "refs/heads/main",
-        "rev": "98f4e263c6e5b9221a7d4442ab947208d80faa0e",
-        "revCount": 251,
-        "type": "git",
-        "url": "file:///Users/matt.rixman/localgit/billing-emea-airflow"
+        "lastModified": 1764804389,
+        "narHash": "sha256-EIhe+KZThS/nLHLRY46cubGnrnxSC2zvVh7HfU2EHOk=",
+        "path": "/Users/matt.rixman/src/billing-emea-airflow",
+        "type": "path"
       },
       "original": {
-        "type": "git",
-        "url": "file:///Users/matt.rixman/localgit/billing-emea-airflow"
+        "path": "/Users/matt.rixman/src/billing-emea-airflow",
+        "type": "path"
       }
     },
     "billing-na-airflow": {
       "flake": false,
       "locked": {
-        "lastModified": 1763548281,
-        "narHash": "sha256-gJnMP/hLSjG6JmtlgaIbbn/q+/pOKvLZyS4BZRIzJoQ=",
-        "ref": "refs/heads/main",
-        "rev": "2db8877ff34280d8f3d1b3be13e8ae18271f70fe",
-        "revCount": 142,
-        "type": "git",
-        "url": "file:///Users/matt.rixman/localgit/billing-na-airflow"
+        "lastModified": 1764804340,
+        "narHash": "sha256-UsFyKFItCwbvd0UCEDa+aVtEUb00EKw4FIimwbagVdQ=",
+        "path": "/Users/matt.rixman/src/billing-na-airflow",
+        "type": "path"
       },
       "original": {
-        "type": "git",
-        "url": "file:///Users/matt.rixman/localgit/billing-na-airflow"
+        "path": "/Users/matt.rixman/src/billing-na-airflow",
+        "type": "path"
       }
     },
     "flake-utils": {

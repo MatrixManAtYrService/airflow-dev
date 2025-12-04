@@ -26,19 +26,19 @@
     };
 
     billing-airflow = {
-      url = "git+file:///Users/matt.rixman/localgit/billing-airflow?ref=main";
+      url = "path:/Users/matt.rixman/src/billing-airflow";
       flake = false;
     };
     billing-na-airflow = {
-      url = "git+file:///Users/matt.rixman/localgit/billing-na-airflow";
+      url = "path:/Users/matt.rixman/src/billing-na-airflow";
       flake = false;
     };
     billing-emea-airflow = {
-      url = "git+file:///Users/matt.rixman/localgit/billing-emea-airflow";
+      url = "path:/Users/matt.rixman/src/billing-emea-airflow";
       flake = false;
     };
     billing-apac-airflow = {
-      url = "git+file:///Users/matt.rixman/localgit/billing-apac-airflow";
+      url = "path:/Users/matt.rixman/src/billing-apac-airflow";
       flake = false;
     };
   };

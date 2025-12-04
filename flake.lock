@@ -3,18 +3,18 @@
     "billing-airflow": {
       "flake": false,
       "locked": {
-        "lastModified": 1757017908,
-        "narHash": "sha256-N1gRR1GhUXe8HEBsn38kkiLTVU7eiASOnINwCDY6CjM=",
+        "lastModified": 1764865610,
+        "narHash": "sha256-0BCzWma/Y7Sx5fXV7zJNoOkazR4XaHTRPm1SFJL063g=",
         "ref": "main",
-        "rev": "0ab931bbb758a1c84c6f881e165dc5a7bda2b627",
-        "revCount": 417,
+        "rev": "891fff7341a227446925d7f0410583395c11961a",
+        "revCount": 415,
         "type": "git",
-        "url": "ssh://git@github.corp.clover.com/clover/billing-airflow.git"
+        "url": "file:///Users/matt.rixman/localgit/billing-airflow"
       },
       "original": {
         "ref": "main",
         "type": "git",
-        "url": "ssh://git@github.corp.clover.com/clover/billing-airflow.git"
+        "url": "file:///Users/matt.rixman/localgit/billing-airflow"
       }
     },
     "billing-apac-airflow": {
@@ -22,50 +22,47 @@
       "locked": {
         "lastModified": 1756372473,
         "narHash": "sha256-bxKBPKnyig0oEFoCxAOs/+tUqhZAP8gdpK96+jR2gB0=",
-        "ref": "main",
+        "ref": "refs/heads/main",
         "rev": "916a821912368119a28522fe5c359d631879bc1b",
         "revCount": 178,
         "type": "git",
-        "url": "ssh://git@github.corp.clover.com/clover/billing-apac-airflow.git"
+        "url": "file:///Users/matt.rixman/localgit/billing-apac-airflow"
       },
       "original": {
-        "ref": "main",
         "type": "git",
-        "url": "ssh://git@github.corp.clover.com/clover/billing-apac-airflow.git"
+        "url": "file:///Users/matt.rixman/localgit/billing-apac-airflow"
       }
     },
     "billing-emea-airflow": {
       "flake": false,
       "locked": {
-        "lastModified": 1757346867,
-        "narHash": "sha256-JLIxEK3BGphd6tzVgKQ/FSvuBorPMza5fN0hRZYssRU=",
-        "ref": "main",
-        "rev": "b523d98a2066864f4f94cacd05cf14dcef19bcbb",
-        "revCount": 236,
+        "lastModified": 1757673144,
+        "narHash": "sha256-kBIXyuiDdZYzsCerwc/BbhG+YP3eC4YoZ00B3rOkNiU=",
+        "ref": "refs/heads/main",
+        "rev": "98f4e263c6e5b9221a7d4442ab947208d80faa0e",
+        "revCount": 251,
         "type": "git",
-        "url": "ssh://git@github.corp.clover.com/clover/billing-emea-airflow.git"
+        "url": "file:///Users/matt.rixman/localgit/billing-emea-airflow"
       },
       "original": {
-        "ref": "main",
         "type": "git",
-        "url": "ssh://git@github.corp.clover.com/clover/billing-emea-airflow.git"
+        "url": "file:///Users/matt.rixman/localgit/billing-emea-airflow"
       }
     },
     "billing-na-airflow": {
       "flake": false,
       "locked": {
-        "lastModified": 1757001675,
-        "narHash": "sha256-u/kp+3Bx1aJhXovrNoGLB8M5qfZ0rHIfe5A+CPBVI5g=",
-        "ref": "main",
-        "rev": "245d31f6cad212ff275427b398272eb020052acf",
-        "revCount": 120,
+        "lastModified": 1763548281,
+        "narHash": "sha256-gJnMP/hLSjG6JmtlgaIbbn/q+/pOKvLZyS4BZRIzJoQ=",
+        "ref": "refs/heads/main",
+        "rev": "2db8877ff34280d8f3d1b3be13e8ae18271f70fe",
+        "revCount": 142,
         "type": "git",
-        "url": "ssh://git@github.corp.clover.com/clover/billing-na-airflow.git"
+        "url": "file:///Users/matt.rixman/localgit/billing-na-airflow"
       },
       "original": {
-        "ref": "main",
         "type": "git",
-        "url": "ssh://git@github.corp.clover.com/clover/billing-na-airflow.git"
+        "url": "file:///Users/matt.rixman/localgit/billing-na-airflow"
       }
     },
     "flake-utils": {

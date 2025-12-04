@@ -26,19 +26,19 @@
     };
 
     billing-airflow = {
-      url = "git+ssh://git@github.corp.clover.com/clover/billing-airflow.git?ref=main";
+      url = "git+file:///Users/matt.rixman/localgit/billing-airflow?ref=main";
       flake = false;
     };
     billing-na-airflow = {
-      url = "git+ssh://git@github.corp.clover.com/clover/billing-na-airflow.git?ref=main";
+      url = "git+file:///Users/matt.rixman/localgit/billing-na-airflow";
       flake = false;
     };
     billing-emea-airflow = {
-      url = "git+ssh://git@github.corp.clover.com/clover/billing-emea-airflow.git?ref=main";
+      url = "git+file:///Users/matt.rixman/localgit/billing-emea-airflow";
       flake = false;
     };
     billing-apac-airflow = {
-      url = "git+ssh://git@github.corp.clover.com/clover/billing-apac-airflow.git?ref=main";
+      url = "git+file:///Users/matt.rixman/localgit/billing-apac-airflow";
       flake = false;
     };
   };
@@ -78,7 +78,7 @@
         pkgs = import nixpkgs {
           inherit system;
           overlays = [
-            nixpkgsArtifactoryOverlay
+            #nixpkgsArtifactoryOverlay
           ];
           config.allowUnfree = true;
         };
@@ -104,7 +104,7 @@
             google-re2-overlay
             python-nvd3-overlay
             starkbank-ecdsa-overlay
-            pyprojectArtifactoryOverlay
+            #pyprojectArtifactoryOverlay
           ])
         );
 
@@ -185,11 +185,9 @@
           pname = "billing-airflow";
           version = "0.1.0";
           src = billing-airflow;
-
-          propagatedBuildInputs = with pkgs.python311Packages; [
-            aiohttp
-            sendgrid
-          ];
+          pyproject = true;
+          build-system = [ pkgs.python311Packages.hatchling ];
+          dontCheckRuntimeDeps = true;
         };
         billing-na-airflow-pkg = pkgs.python311Packages.buildPythonPackage {
           pname = "billing-na-airflow";

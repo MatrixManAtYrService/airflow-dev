@@ -7,10 +7,10 @@ authors = [
 ]
 requires-python = ">=3.11"
 dependencies = [
-    "aiohttp==3.10.11",
+    "aiohttp>=3.10",
     "apache-airflow-providers-pagerduty==3.2.0",
     "apache-airflow[celery]==2.10.5",
-    "sendgrid==6.10.0",
+    "sendgrid>=6.10",
 ]
 version = "0.1.0"
 

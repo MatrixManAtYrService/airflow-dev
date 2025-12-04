@@ -51,21 +51,26 @@ let
       echo "Building and staging DAGs for environment: $ENV_NAME"
       nix build ".#$ENV_NAME" --out-link result
 
-      # Manage the dags symlink
-      DagsLinkPath="$AIRFLOW_HOME_DIR/dags"
-      if [ -e "$DagsLinkPath" ]; then
-        if [ -L "$DagsLinkPath" ]; then
-          rm -f "$DagsLinkPath"
+      # Set up dags directory structure:
+      # - airflow_home/dags/ is a normal directory (mutable, for your own DAGs)
+      # - airflow_home/dags/packaged_dags is a symlink to the nix store
+      DagsDir="$AIRFLOW_HOME_DIR/dags"
+      PackagedDagsLink="$DagsDir/packaged_dags"
+
+      mkdir -p "$DagsDir"
+
+      # Manage the packaged_dags symlink
+      if [ -e "$PackagedDagsLink" ]; then
+        if [ -L "$PackagedDagsLink" ]; then
+          rm -f "$PackagedDagsLink"
         else
-          echo "Error: $DagsLinkPath is a directory, not a symlink." >&2
-          echo "Please fix this by running:" >&2
-          echo "  sudo rm -rf $DagsLinkPath" >&2
-          echo "Then re-run the prep-airflow command." >&2
+          echo "Error: $PackagedDagsLink exists but is not a symlink." >&2
+          echo "Please remove it manually and re-run." >&2
           exit 1
         fi
       fi
-      
-      ln -s "$(pwd)/result/dags" "$DagsLinkPath"
+
+      ln -s "$(pwd)/result/dags" "$PackagedDagsLink"
 
       echo "✅ Environment setup complete!"
     '';

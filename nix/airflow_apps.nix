@@ -39,6 +39,16 @@ let
       echo "Executing: $DB_INIT_CMD"
       eval "$DB_INIT_CMD"
 
+      # Create admin user with password "admin"
+      echo "Creating admin user..."
+      airflow users create \
+        --username admin \
+        --password admin \
+        --firstname Admin \
+        --lastname User \
+        --role Admin \
+        --email admin@localhost
+
       # Set variables
       echo "Setting Airflow variables..."
       echo "$VARIABLES_JSON" | jq -r 'keys_unsorted[]' | while IFS= read -r key; do

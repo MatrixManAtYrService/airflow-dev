@@ -254,11 +254,70 @@
 
           # NA environments  
           "dev-billing" = dagLib.mkDagPackage { repo = billing-na-airflow; region = "na"; environment = "dev"; };
+          "whatif" = dagLib.mkDagPackage {
+            repo = billing-na-airflow;
+            region = "na";
+            environment = "whatif";
+            packageDags = false;
+            override_dags = ./environment_dags/whatif;
+            variables = {
+              "whatif.nabilling_secret" = "unused";
+              "whatif.billingevent_secret" = "unused";
+              "whatif.bookkeeper_secret" = "unused";
+            };
+            connections = {
+              whatif_url = {
+                type = "http";
+                host = "localhost";
+                schema = "http";
+                port = 9999;
+              };
+            };
+          };
           prod = dagLib.mkDagPackage { repo = billing-na-airflow; region = "na"; environment = "prod"; };
           nastaging = dagLib.mkDagPackage { repo = billing-na-airflow; region = "na"; environment = "stage"; };
 
           # EMEA environments
           "euprod-alt" = dagLib.mkDagPackage { repo = billing-emea-airflow; region = "emea"; environment = "prod"; };
+
+          # Developer environments
+          "intercept-dev" = dagLib.mkDagPackage {
+            repo = billing-na-airflow;
+            region = "na";
+            environment = "intercept-dev";
+            variables = {
+              "demo2.billingevent_secret" = "unused";
+              "demo2.bookkeeper_secret" = "unused";
+              "demo2.emeabilling_secret" = "unused";
+              "dev1.billingevent_secret" = "unused";
+              "dev1.bookkeeper_secret" = "unused";
+              "dev1.emeabilling_secret" = "unused";
+              "dev1.nabilling_secret" = "unused";
+              "dev2.billingapac_secret" = "unused";
+              "dev2.billingevent_secret" = "unused";
+              "dev2.bookkeeper_secret" = "unused";
+              "dev26.billingevent_secret" = "unused";
+              "dev26.bookkeeper_secret" = "unused";
+              "dev7.billingevent_secret" = "unused";
+              "dev7.bookkeeper_secret" = "unused";
+              "perf_test.billingevent_secret" = "unused";
+              "perf_test.bookkeeper_secret" = "unused";
+              "perf_test.nabilling_secret" = "unused";
+              "stg2.billingevent_secret" = "unused";
+              "stg2.bookkeeper_secret" = "unused";
+              "stg3.billingevent_secret" = "unused";
+              "stg3.bookkeeper_secret" = "unused";
+              "stg3.emeabilling_secret" = "unused";
+            };
+            connections = {
+              dev1_url = {
+                type = "http";
+                host = "localhost";
+                schema = "http";
+                port = 9998;
+              };
+            };
+          };
         };
 
         # Import Airflow app

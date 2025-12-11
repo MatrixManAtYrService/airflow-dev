@@ -42,8 +42,8 @@
     "billing-na-airflow": {
       "flake": false,
       "locked": {
-        "lastModified": 1764804340,
-        "narHash": "sha256-UsFyKFItCwbvd0UCEDa+aVtEUb00EKw4FIimwbagVdQ=",
+        "lastModified": 1765236492,
+        "narHash": "sha256-ghs2KgFxccceLqpYoZ3d+1rSztGOHxZTjN8aDh4WwO0=",
         "path": "/Users/matt.rixman/src/billing-na-airflow",
         "type": "path"
       },
